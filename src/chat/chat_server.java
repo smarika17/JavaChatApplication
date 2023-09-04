@@ -3,10 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package chat;
+
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+
 /**
  *
  * @author smarikamalviya
@@ -17,6 +19,7 @@ public class chat_server extends javax.swing.JFrame {
     static Socket s;
     static DataInputStream dis;
     static DataOutputStream dout;
+
     /**
      * Creates new form chat_server
      */
@@ -46,6 +49,11 @@ public class chat_server extends javax.swing.JFrame {
         jScrollPane1.setViewportView(msg_area);
 
         msg_send.setText("send");
+        msg_send.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                msg_sendActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         jLabel1.setText("Server");
@@ -82,6 +90,19 @@ public class chat_server extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void msg_sendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_msg_sendActionPerformed
+        // TODO add your handling code here:
+        try{
+        String msg="";
+        msg=msg_text.getText();
+        dout.writeUTF(msg);
+        msg_text.setText("");
+        }catch(Exception e){
+            //handle the exception here.
+        }
+            
+    }//GEN-LAST:event_msg_sendActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -116,12 +137,22 @@ public class chat_server extends javax.swing.JFrame {
             }
         });
         
-        try{
-        String magin="";
-        ss=new ServerSocket(1201);
-        }catch(Exception e){
+        try {
+            String msgin = "";
+            ss = new ServerSocket(1201);
+            s = ss.accept();
+            dis = new DataInputStream(s.getInputStream());
+            dout = new DataOutputStream(s.getOutputStream());
+            
+            while (!msgin.equals("exit")) {
+                msgin = dis.readUTF(); //utf is object, which can hold message send from the client.
+                msg_area.setText(msg_area.getText()+"\n Client: "+msgin);
+                
+            }
+        } catch (Exception e) {
             //handle the exception here
         }
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
