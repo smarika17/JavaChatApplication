@@ -1,6 +1,7 @@
 # JavaChatApplication
 Chat application created using JAVA (Jframe)
 
+Simple chat application in Java where we have made interfaces for server and client.
 
 # Output
 
